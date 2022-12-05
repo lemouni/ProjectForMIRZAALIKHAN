@@ -44,5 +44,10 @@ namespace BLL
         {
             return dal.Update(p, id);
         }
+        public List<ProductViewModel> SearchReadViewModel(string s, int index)
+        {
+            return dal.SearchReadViewModel(s,index);
+        }
+
     }
 }

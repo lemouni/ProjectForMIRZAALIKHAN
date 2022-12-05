@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -35,6 +36,19 @@ namespace ProjectForMIRZAALIKHAN
             dataGridViewX1.DataSource = bll.Read();
             dataGridViewX1.Columns["id"].Visible = false;
         }
+        void FillDataGrid1()
+        {
+            //dataGridViewX2.DataSource = null;
+            //dataGridViewX2.DataSource = Ibll.Read();
+            //dataGridViewX2.Columns["id"].Visible = false;
+
+
+
+            dataGridViewX2.DataSource = null;
+            dataGridViewX2.DataSource = bll.ReadViewModel();
+            //  dataGridViewX2.Columns["id"].Visible = false;
+        }
+
         void ClearTxtBoxs()
         {
             textBoxX1.Text = "";
@@ -103,6 +117,8 @@ namespace ProjectForMIRZAALIKHAN
                 }
             }
             FillDataGrid();
+            FillDataGrid1();
+
             ClearTxtBoxs();
 
         }
@@ -124,12 +140,13 @@ namespace ProjectForMIRZAALIKHAN
             }
             dataGridViewX1.DataSource = null;
             dataGridViewX1.DataSource = bll.Read(textBoxX3.Text, index);
-            dataGridViewX1.Columns["id"].Visible = false;
+            dataGridViewX1.Columns["ایدی"].Visible = false;
         }
 
         private void ProductForm_Load(object sender, EventArgs e)
         {
             FillDataGrid();
+            FillDataGrid1();
 
         }
 
@@ -182,6 +199,8 @@ namespace ProjectForMIRZAALIKHAN
                     MessageBox.Show(bll.Delete(id));
                 }
                 FillDataGrid();
+                FillDataGrid1();
+
             }
             else
             {
@@ -223,5 +242,36 @@ namespace ProjectForMIRZAALIKHAN
                 e.Handled = true;
         }
 
+        private void dataGridViewX2_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            contextMenuStrip1.Show(Cursor.Position.X, Cursor.Position.Y);
+            id = Convert.ToInt32(dataGridViewX2.Rows[dataGridViewX2.CurrentRow.Index].Cells[0].Value);
+
+        }
+
+        private void textBoxX4_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxX4.Text == "")
+            {
+                FillDataGrid1();
+            }
+            else
+            {
+                if (checkBox2.Checked && checkBox1.Checked || (!checkBox1.Checked && !checkBox2.Checked))
+                {
+                    index = 0;
+                }
+                else if (checkBox2.Checked && !checkBox1.Checked)
+                {
+                    index = 1;
+                }
+                else if (checkBox1.Checked && !checkBox2.Checked)
+                {
+                    index = 2;
+                }
+                dataGridViewX2.DataSource = null;
+                dataGridViewX2.DataSource = bll.SearchReadViewModel(textBoxX4.Text,index);
+            }
+        }
     }
 }

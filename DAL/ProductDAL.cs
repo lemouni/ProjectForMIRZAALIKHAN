@@ -100,6 +100,25 @@ namespace DAL
             sqladapter.Fill(ds);
             return ds.Tables[0];
         }
+        public List<ProductViewModel> SearchReadViewModel(string s,int index)
+        {
+            List<ProductViewModel> lst = new List<ProductViewModel>();
+
+            for (int i = 0; i < Read(s, index).Rows.Count; i++)
+            {
+                ProductViewModel st = new ProductViewModel();
+                st.id = Convert.ToInt32(Read(s,index).Rows[i]["ایدی"]);
+                //st.CheckoutDate = Convert.ToDateTime(MetodExtations.ToShamsi((DateTime)Read(s).Rows[i]["تاریخ پرداخت"]));
+                st.nameP = Read(s, index).Rows[i]["نام محصول"].ToString();
+
+                st.Code = Read(s, index).Rows[i]["کد محصول"].ToString();
+                st.IsActive = (bool)Read(s, index).Rows[i]["وضعیت فعالی"];
+                lst.Add(st);
+            }
+            return lst;
+
+
+        }
         public string Delete(int id)
         {
             try
@@ -134,7 +153,7 @@ namespace DAL
                 if (q != null)
                 {
                     q.nameP = p.nameP;
-                    p.Code = p.Code;
+                    q.Code = p.Code;
                     q.IsActive = p.IsActive;
                     db.SaveChanges();
                     return "ویرایش اطلاعات با موفقیت انجام شد";
